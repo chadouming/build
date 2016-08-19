@@ -20,7 +20,7 @@ BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.maps
 #######################
 
 # Disable modules that don't work with DragonTC. Split up by arch.
-DISABLE_DTC_arm :=
+DISABLE_DTC_arm := libjni_latinime libblasV8
 DISABLE_DTC_arm64 :=
 
 # Set DISABLE_DTC based on arch
@@ -53,10 +53,10 @@ ifeq ($(my_clang),true)
       # Darwin is really bad at dealing with idiv/sdiv. Don't use krait on Darwin.
       CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=cortex-a9
     else
-      CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=krait
+      CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=cortex-a53
     endif
   else
-    CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=krait2
+    CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=cortex-a53
   endif
 endif
 
@@ -67,7 +67,7 @@ endif
 
 # Polly flags for use with Clang
 POLLY := -O3 -mllvm -polly \
-  -mllvm -polly-parallel \
+  -mllvm -polly-parallel -lgomp \
   -mllvm -polly-ast-use-context \
   -mllvm -polly-vectorizer=polly \
   -mllvm -polly-opt-fusion=max \
@@ -102,12 +102,15 @@ DISABLE_POLLY_arm := \
   libRSCpuRef \
   libRS \
   libjni_latinime_common_static \
+  libjni_latinime \
   libmedia \
   libRSDriver \
+  libscrypt_static \
   libxml2 \
   libc_freebsd \
   libc_tzcode \
   libv8
+
 DISABLE_POLLY_arm64 := \
   libpng \
   libfuse \
@@ -122,6 +125,7 @@ DISABLE_POLLY_arm64 := \
   libF77blas \
   libbccSupport \
   libblas \
+  libblasV8 \
   libRS \
   libstagefright_mpeg2ts \
   bcc_strip_attr
@@ -132,10 +136,12 @@ ifeq (1,$(words $(filter 3.8 3.9,$(LLVM_PREBUILTS_VERSION))))
 	healthd \
 	libandroid_runtime \
 	libblas \
+	libblasV8 \
 	libF77blas \
 	libF77blasV8 \
 	libgui \
 	libjni_latinime_common_static \
+	libjni_latinime \
 	libLLVMAArch64CodeGen \
 	libLLVMARMCodeGen \
 	libLLVMAnalysis \
@@ -151,6 +157,7 @@ ifeq (1,$(words $(filter 3.8 3.9,$(LLVM_PREBUILTS_VERSION))))
 	libprotobuf-cpp-lite \
 	libRS \
 	libRSCpuRef \
+	libscrypt_static \
 	libunwind_llvm \
 	libv8 \
 	libvixl \
@@ -186,7 +193,7 @@ endif
 #############
 
 # Disable modules that don't work with Link Time Optimizations. Split up by arch.
-DISABLE_LTO_arm := libLLVMScalarOpts libjni_latinime_common_static libjni_latinime adbd nit libnetd_client libblas
+DISABLE_LTO_arm := libLLVMScalarOpts libjni_latinime_common_static adbd nit libnetd_client libblas
 DISABLE_THINLTO_arm := libart libart-compiler libsigchain
 DISABLE_LTO_arm64 := 
 DISABLE_THINLTO_arm64 :=
