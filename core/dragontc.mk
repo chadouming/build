@@ -49,17 +49,8 @@ ifeq ($(my_clang),true)
   ifeq (1,$(words $(filter $(DISABLE_DTC),$(LOCAL_MODULE))))
     my_cc := $(AOSP_CLANG)
     my_cxx := $(AOSP_CLANG_CXX)
-    ifeq ($(HOST_OS),darwin)
-      # Darwin is really bad at dealing with idiv/sdiv. Don't use krait on Darwin.
-      CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=cortex-a9
-    else
-      CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=cortex-a53.a57
-    endif
-  else
-    CLANG_CONFIG_arm_EXTRA_CFLAGS += -mcpu=cortex-a53.a57
   endif
 endif
-
 
 #################
 ##  P O L L Y  ##
@@ -187,7 +178,6 @@ ifeq ($(my_clang),true)
   endif
 endif
 
-
 #############
 ##  L T O  ##
 #############
@@ -197,7 +187,6 @@ DISABLE_LTO_arm := libLLVMScalarOpts libjni_latinime_common_static adbd nit libn
 DISABLE_THINLTO_arm := libart libart-compiler libsigchain
 DISABLE_LTO_arm64 := 
 DISABLE_THINLTO_arm64 :=
-
 
 # Set DISABLE_LTO and DISABLE_THINLTO based on arch
 DISABLE_LTO := \
