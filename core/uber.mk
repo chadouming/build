@@ -53,6 +53,7 @@ LOCAL_DISABLE_STRICT := \
 	libqcomvisualizer \
 	libvisualizer \
 	libutils \
+	libunwind \
 	libandroidfw \
 	dnsmasq \
 	static_busybox \
@@ -130,6 +131,26 @@ LOCAL_FORCE_DISABLE_STRICT := \
 	libnvvisualizer \
 	libiprouteutil \
 	libmmcamera_interface
+
+LOCAL_DISABLE_GCC6_TWEAKS := \
+	libsigchain \
+	dex2oat \
+	libart-disassembler \
+	libart-compiler \
+	patchoat \
+	libunwindbacktrace \
+	libc \
+	oatdump \
+	libart
+
+GCC6_FLAGS := \
+	-Wno-misleading-indentation \
+        -Wno-error=shift-negative-value \
+        -Wno-error=conversion \
+        -Wno-tautological-compare \
+        -Wno-bool-compare \
+        -Wno-error=sizeof-array-argument \
+        -Wno-error=logical-not-parentheses
 
 DISABLE_STRICT := \
 	-fno-strict-aliasing

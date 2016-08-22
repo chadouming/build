@@ -46,6 +46,28 @@ endif
 #
 
 #################
+# GCC 6 TWEAKS
+#################
+ifeq ($(ENABLE_GCC6_TWEAKS),true)
+ifneq (1,$(words $(filter $(LOCAL_DISABLE_GCC6_TWEAKS),$(LOCAL_MODULE))))
+ifdef LOCAL_CONLYFLAGS
+LOCAL_CONLYFLAGS += \
+        $(GCC6_FLAGS)
+else
+LOCAL_CONLYFLAGS := \
+        $(GCC6_FLAGS)
+endif
+ifdef LOCAL_CPPFLAGS
+LOCAL_CPPFLAGS += \
+        $(GCC6_FLAGS)
+else
+LOCAL_CPPFLAGS := \
+        $(GCC6_FLAGS)
+endif
+endif
+endif
+
+#################
 # STRICT_ALIASING
 #################
 ifeq ($(STRICT_ALIASING),true)
